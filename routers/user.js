@@ -1,9 +1,41 @@
-// nside those files:
-// Import the Router class from express.
-// Import the corresponding model.
-// Instantiate a router.
-// Register a GET / route that responds with all the images/users.
-// Export the router.
-// In the top-level index.js file:
-// Import the ./routers/image as imageRouter and ./routers/user as userRouter.
-// Register them both to their corresponding root path (/images and /users).
+const User = require("../models").user;
+const { Router } = require("express");
+const router = new Router();
+
+//POST EEN NIEUWE USER
+router.post("/users", async (req, res, next) => {
+  try {
+    const email = req.body.email;
+
+    if (!email || email === " ") {
+      res.status(404).send("Je moet wel een email adres geven ");
+    } else {
+      const newUser = await User.create(req.body);
+      res.json(newUser);
+    }
+  } catch (e) {
+    console.log(e.message);
+    next(e);
+  }
+});
+
+//POST EEN NIEUWE USER NOG MOOIER OPGESCHREEN
+router.post("/newuser", async (req, res, next) => {
+  try {
+    const { email, password, fullName } = req.body;
+    if (!email || !password || !fullName) {
+      res.status(400).send("missing parameters");
+    } else {
+      const newUser = await User.create({
+        email,
+        password,
+        fullName,
+      });
+      res.json(newUser);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+module.exports = router;
