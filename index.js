@@ -10,7 +10,7 @@ app.use(express.json());
 //USE THE ROUTES
 app.use("/users", userRouter);
 app.use("/images", imageRouter);
-app.use("/auth/", authRouter);
+app.use("/auth", authRouter);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server started in port: ${PORT}`));
