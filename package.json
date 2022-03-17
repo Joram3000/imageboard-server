@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Joram3000/imageboard-server/issues"
   },
-  "homepage": "https://github.com/Joram3000/imageboard-server#readme"
+  "homepage": "https://github.com/Joram3000/imageboard-server#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
 }
