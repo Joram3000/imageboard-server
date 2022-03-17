@@ -4,7 +4,7 @@ const { Router } = require("express");
 const router = new Router();
 
 //POST EEN PLAATJE TITLE EN URL
-router.post("/images", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const url = req.body.url;
     if (!url || url === " ") {
@@ -19,13 +19,13 @@ router.post("/images", async (req, res, next) => {
 });
 
 //SHOW ALLE IMAGES
-router.get("/images", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   const plaatjes = await Image.findAll();
   res.json(plaatjes);
 });
 
 //SHOW 1 IMAGE
-router.get("/images/:id", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   const plaatjeId = parseInt(req.params.id);
   const plaatje = await Image.findByPk(plaatjeId);
 

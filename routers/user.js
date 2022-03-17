@@ -3,7 +3,7 @@ const { Router } = require("express");
 const router = new Router();
 
 //POST EEN NIEUWE USER
-router.post("/users", async (req, res, next) => {
+router.post("/new1", async (req, res, next) => {
   try {
     const email = req.body.email;
 
@@ -20,7 +20,7 @@ router.post("/users", async (req, res, next) => {
 });
 
 //POST EEN NIEUWE USER NOG MOOIER OPGESCHREEN
-router.post("/newuser", async (req, res, next) => {
+router.post("/new2", async (req, res, next) => {
   try {
     const { email, password, fullName } = req.body;
     if (!email || !password || !fullName) {
