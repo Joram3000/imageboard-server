@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
-
 const User = require("../models").user;
 const { Router } = require("express");
 const router = new Router();
+const { toJWT } = require("../auth/jwt");
 
 //LET OP URLTIE//POST EEN NIEUWE USER NOG MOOIER OPGESCHREEN
 router.post("/new2", async (req, res, next) => {

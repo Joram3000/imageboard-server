@@ -1,0 +1,49 @@
+const { Router } = require("express");
+const User = require("./user");
+const { toJWT } = require("../auth/jwt");
+const bcrypt = require("bcrypt");
+const router = new Router();
+
+router.post("/signup", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).send("Please provide an email and password");
+  } else {
+    try {
+      const new_User = await User.create({
+        email: email,
+        password: bcrypt.hashSync(password, 10),
+      });
+      res.send(new_User);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Something went wrong");
+    }
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).send("Please provide a email and password");
+  } else {
+    const auth_User = await User.findOne({
+      where: { email: email },
+    });
+    if (!auth_owner) {
+      res.status(400).send("User not found");
+    } else {
+      // if (password === auth_owner.password) {
+      if (bcrypt.compareSync(password, auth_User.password)) {
+        const token = toJWT({
+          userId: auth_User.id,
+        });
+        res.send({ token });
+      } else {
+        res.send("Password not correct");
+      }
+    }
+  }
+});
+
+module.exports = router;
