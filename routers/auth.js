@@ -1,51 +1,45 @@
+const bcrypt = require("bcrypt");
+const User = require("../models").user;
 const { Router } = require("express");
-const { toJWT, toData } = require("../auth/jwt");
-const jwt = require("jsonwebtoken");
-
 const router = new Router();
 
-//????
-
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    res.status(400).send({
-      message: "Please supply a valid email and password",
-    });
+router.post("/signup", async (req, res, next) => {
+  const { email, password, fullName } = req.body;
+  if (!email || !password || !fullName) {
+    res.status(400).send("Please provide an email and password and fullName");
   } else {
-    // 1. find user based on email address
-    // 2. use bcrypt.compareSync to check the received password against the stored hash
-    // 3. if the password is correct, return a JWT with the userId of the user (user.id)
-
-    res.send({
-      jwt: toJWT({ userId: 1 }),
-    });
+    try {
+      const new_User = await User.create({
+        email,
+        password: bcrypt.hashSync(password, 10),
+        fullName,
+      });
+      res.send(new_User);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Something went wrongwith the making of the user");
+      next(e);
+    }
   }
 });
 
-// // 1. find user based on email address
-// const user = await User.findOne({
-//   where: {
-//     email: email,
-//   },
-// });
-// if (!user) {
-//   res.status(400).send({
-//     message: "User with that email does not exist",
-//   });
-// }
-// // 2. use bcrypt.compareSync to check the password against the stored hash
-// else if (bcrypt.compareSync(password, user.password)) {
-//   // 3. if the password is correct, return a JWT with the userId of the user (user.id)
-//   const jwt = toJWT({ userId: user.id });
-//   res.send({
-//     jwt,
-//   });
-// } else {
-//   res.status(400).send({
-//     message: "Password was incorrect",
-//   });
-// }
+//LET OP URLTIE//POST EEN NIEUWE USER NOG MOOIER OPGESCHREEN
+router.post("/new2", async (req, res, next) => {
+  try {
+    const { email, password, fullName } = req.body;
+    if (!email || !password || !fullName) {
+      res.status(400).send("missing parameters");
+    } else {
+      const newUser = await User.create({
+        email,
+        password: bcrypt.hashSync(password, 10),
+        fullName,
+      });
+      res.json(newUser);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
 
 module.exports = router;
